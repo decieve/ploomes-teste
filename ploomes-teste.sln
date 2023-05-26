@@ -1,0 +1,46 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ploomes-teste.application", "ploomes-teste.application\ploomes-teste.application.csproj", "{B54133E3-01A9-4C87-9634-FF4107216493}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ploomes-teste.domain", "ploomes-teste.domain\ploomes-teste.domain.csproj", "{D208CD0D-574C-4BB3-AE6C-D0F4FF9F0853}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ploomes-teste.api", "ploomes-teste.api\ploomes-teste.api.csproj", "{7B6907EC-310B-4D9C-BE7B-A7085E985D52}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ploomes-teste.negocio", "ploomes-teste.negocio\ploomes-teste.negocio.csproj", "{AA33FDC7-5FB1-4B47-9E58-D4156B0DE9FB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ploomes-teste.persistence", "ploomes-teste.persistence\ploomes-teste.persistence.csproj", "{7811AD6F-E1CB-445B-8CB1-EF2894FE25C3}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B54133E3-01A9-4C87-9634-FF4107216493}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B54133E3-01A9-4C87-9634-FF4107216493}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B54133E3-01A9-4C87-9634-FF4107216493}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B54133E3-01A9-4C87-9634-FF4107216493}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D208CD0D-574C-4BB3-AE6C-D0F4FF9F0853}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D208CD0D-574C-4BB3-AE6C-D0F4FF9F0853}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D208CD0D-574C-4BB3-AE6C-D0F4FF9F0853}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D208CD0D-574C-4BB3-AE6C-D0F4FF9F0853}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7B6907EC-310B-4D9C-BE7B-A7085E985D52}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7B6907EC-310B-4D9C-BE7B-A7085E985D52}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7B6907EC-310B-4D9C-BE7B-A7085E985D52}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7B6907EC-310B-4D9C-BE7B-A7085E985D52}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AA33FDC7-5FB1-4B47-9E58-D4156B0DE9FB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AA33FDC7-5FB1-4B47-9E58-D4156B0DE9FB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AA33FDC7-5FB1-4B47-9E58-D4156B0DE9FB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AA33FDC7-5FB1-4B47-9E58-D4156B0DE9FB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7811AD6F-E1CB-445B-8CB1-EF2894FE25C3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7811AD6F-E1CB-445B-8CB1-EF2894FE25C3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7811AD6F-E1CB-445B-8CB1-EF2894FE25C3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7811AD6F-E1CB-445B-8CB1-EF2894FE25C3}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
