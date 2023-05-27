@@ -11,5 +11,6 @@ namespace ploomes_teste.negocio.Contracts
         bool ValidateNotaAtendimento(double notaAtendimento);
         Task<bool> ValidateAvaliacaoDuplicada(Guid LugarAvaliacaoId,string UsuarioAvaliacaoId);
         Task<List<string>> Validate(Avaliacao avaliacao,string idUsuarioLogado);
+        Task<bool> ValidateLugarExiste(Guid LugarAvaliacaoId);
     }
 }

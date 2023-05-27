@@ -10,7 +10,9 @@ namespace ploomes_teste.application.Services.Contracts
         Task<LugarDTO> AtualizarLugar(AtualizarLugarDTO lugarAtualizado,Guid IdLugar,Usuario usuarioLogado);
         Task<LugarDTO> DeletarLugar(Guid idLugar,Usuario usuarioLogado);
         Task<LugarPageDTO> GetLugaresPage(int pageNumber,int pageSize = 10);
-        Task<LugarPageDTO> GetLugaresPageByUsuario(Usuario usuarioLogado,int pageNumber,int pageSize = 10);    
+        Task<LugarPageDTO> GetLugaresPageByProprietario(Usuario usuarioLogado,int pageNumber,int pageSize = 10);    
         Task<LugarDTO> GetLugarById(Guid idLugar);
+        Task<LugarPageDTO> GetLugaresPageByLocalizacaoAvaliador(Usuario usuarioLogado,int pageNumber,int pageSize = 10);
+        Task<TipoLugarDTO[]> GetTiposLugares();
     }
 }

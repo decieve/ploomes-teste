@@ -24,6 +24,25 @@ using ploomes_teste.application.Services.Contracts;
 using ploomes_teste.negocio.Contracts;
 using ploomes_teste.negocio.Implementations;
 
+async Task CreateRoles(IServiceProvider serviceProvider)
+{
+    
+    var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+    var userManager = serviceProvider.GetRequiredService<UserManager<Usuario>>();
+    string[] rolesNames = { "Proprietario", "Avaliador" };
+    IdentityResult result;
+    foreach (var namesRole in rolesNames)
+    {
+        var roleExist = await roleManager.RoleExistsAsync(namesRole);
+        if (!roleExist)
+        {
+            result = await roleManager.CreateAsync(new IdentityRole(namesRole));
+        }
+    }
+}
+
+
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -33,24 +52,25 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-// Inje��o de dependencia
+// Injeção de dependencia
 
-// Reposit�rios - Classes de Acesso ao banco
+// Repositórios - Classes de Acesso ao banco
 builder.Services.AddScoped<IAvaliacaoRepository, AvaliacaoRepository>();
 builder.Services.AddScoped<ILugarRepository, LugarRepository>();
+builder.Services.AddScoped<ITipoLugarRepository,TipoLugarRepository>();
 
-// Servicos
+// Serviços
 builder.Services.AddScoped<IAvaliacaoService, AvaliacaoService>();
 builder.Services.AddScoped<ILugarService, LugarService>();
-
-
+builder.Services.AddScoped<IUsuarioService, UsuarioService>();
 // Camada de Negocio
 builder.Services.AddScoped<ICriarAvaliacaoNegocio, CriarAvaliacaoNegocio>();
 builder.Services.AddScoped<IAlterarAvaliacaoNegocio, AlterarAvaliacaoNegocio>();
 builder.Services.AddScoped<ICriarLugarNegocio, CriarLugarNegocio>();
 builder.Services.AddScoped<IAlterarLugarNegocio, AlterarLugarNegocio>();
+builder.Services.AddScoped<IRegistrarAvaliadorNegocio, RegistrarAvaliadorNegocio>();
 
-builder.Services.AddScoped<ILugarService, LugarService>();
+
 
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
@@ -130,20 +150,8 @@ builder.Services.AddAuthentication(x =>
 });
 		
 var app = builder.Build();
-
-var roleManager = app.Services.GetRequiredService<RoleManager<IdentityRole>>();
-var userManager = app.Services.GetRequiredService<UserManager<Usuario>>();
-string[] rolesNames = { "Proprietario", "Avaliador" };
-IdentityResult result;
-foreach (var namesRole in rolesNames)
-{
-    var roleExist = await roleManager.RoleExistsAsync(namesRole);
-    if (!roleExist)
-    {
-        result = await roleManager.CreateAsync(new IdentityRole(namesRole));
-    }
-}
-
+using var scope = app.Services.CreateScope();
+CreateRoles(scope.ServiceProvider).Wait();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {

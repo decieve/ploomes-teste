@@ -24,10 +24,10 @@ namespace ploomes_teste.persistence.Implementations
                         .FirstOrDefaultAsync();
         }
 
-        public async Task<Avaliacao[]> GetAvaliacoesByUsuario(int pageNumber, string idUsuario, int pageSize = 10, bool includeHistorico = false)
+        public async Task<Avaliacao[]> GetAvaliacoesByAvaliador(int pageNumber, string idAvaliador, int pageSize = 10, bool includeHistorico = false)
         {
             var main_query = from avaliacao in _context.Avaliacoes
-                            where avaliacao.Avaliador.Id == idUsuario
+                            where avaliacao.Avaliador.Id == idAvaliador
                             orderby avaliacao.DataAtualizada descending
                             select avaliacao;
 
@@ -58,10 +58,10 @@ namespace ploomes_teste.persistence.Implementations
                 .ToArrayAsync();
         }
 
-        public async Task<Avaliacao> GetAvaliacaoByIdLugarIdUsuario(Guid idLugar, string idUsuario, bool includeHistorico = false)
+        public async Task<Avaliacao> GetAvaliacaoByIdLugarIdAvaliador(Guid idLugar, string idAvaliador, bool includeHistorico = false)
         {
                var main_query = from avaliacao in _context.Avaliacoes
-                            where avaliacao.LugarId == idLugar && avaliacao.UsuarioId == idUsuario
+                            where avaliacao.LugarId == idLugar && avaliacao.AvaliadorId == idAvaliador
                             select avaliacao;
             if(includeHistorico)
                 main_query.Include(a => a.Historico);

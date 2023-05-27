@@ -1,9 +1,11 @@
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.AspNetCore.Identity;
 
 namespace ploomes_teste.domain
 {
     public class Avaliacao {
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Key]
         public Guid Id { get; set; }
         [Required]
@@ -25,7 +27,7 @@ namespace ploomes_teste.domain
         [Required]
         public DateTime DataAtualizada {get;set;}
         [Required]
-        public string UsuarioId{get;set;}
+        public string AvaliadorId{get;set;}
         [Required]
         public Guid LugarId{get;set;}
         

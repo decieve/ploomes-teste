@@ -14,159 +14,120 @@ namespace ploomes_teste.application.Services.Implementations
         private readonly IAvaliacaoRepository _avaliacaoRepository;
         private readonly IAlterarAvaliacaoNegocio _alterarAvaliacaoNegocio;
         private readonly ICriarAvaliacaoNegocio _criarAvaliacaoNegocio;
-        public AvaliacaoService(IAvaliacaoRepository avaliacaoRepository,IMapper mapper){
+        public AvaliacaoService(IAvaliacaoRepository avaliacaoRepository,IMapper mapper,ICriarAvaliacaoNegocio criarAvaliacaoNegocio,IAlterarAvaliacaoNegocio alterarAvaliacaoNegocio){
             _avaliacaoRepository = avaliacaoRepository;
             _mapper = mapper;
+            _criarAvaliacaoNegocio = criarAvaliacaoNegocio;
+            _alterarAvaliacaoNegocio = alterarAvaliacaoNegocio;
         }
-        public async Task<AvaliacaoUsuarioDTO> AtualizarAvaliacao(CriarAtualizarAvaliacaoDTO avaliacaoAtualizada,Guid idAvaliacao,Usuario usuarioLogado)
+        public async Task<AvaliacaoUsuarioDTO> AtualizarAvaliacao(AtualizarAvaliacaoDTO avaliacaoAtualizada,Guid idAvaliacao,Usuario usuarioLogado)
         {
-            try{
-                var avaliacaoAtualizar = await _avaliacaoRepository.GetAvaliacaoById(idAvaliacao);
-                if(avaliacaoAtualizar == null)
-                    throw new NotFoundException("Não foi encontrada uma avaliação com o id especificado");
-                if(avaliacaoAtualizar.UsuarioId != usuarioLogado.Id)
-                    throw new ForbiddenException("O usuário logado não é o mesmo que criou a avaliação"); 
-                //Salva no histórico
-                HistoricoAvaliacao historico = new();
-                historico.Anonimo = avaliacaoAtualizar.Anonimo;
-                historico.Descricao = avaliacaoAtualizar.Descricao;
-                historico.NotaAmbiente = avaliacaoAtualizar.NotaAmbiente;
-                historico.NotaAtendimento = avaliacaoAtualizar.NotaAtendimento;
-                historico.NotaPreco = avaliacaoAtualizar.NotaPreco;
-                historico.NotaQualidade = avaliacaoAtualizar.NotaQualidade;
-                historico.DataModificacao = DateTime.Now;
-
-                // Atualiza a avaliação
-                avaliacaoAtualizar.NotaPreco = avaliacaoAtualizada.NotaPreco;
-                avaliacaoAtualizar.NotaAmbiente = avaliacaoAtualizada.NotaAmbiente;
-                avaliacaoAtualizar.NotaQualidade = avaliacaoAtualizada.NotaQualidade;
-                avaliacaoAtualizar.NotaAtendimento = avaliacaoAtualizada.NotaAtendimento;
-                avaliacaoAtualizar.Descricao = avaliacaoAtualizada.Descricao;
-                avaliacaoAtualizar.Anonimo = avaliacaoAtualizada.Anonimo;
-                avaliacaoAtualizar.DataAtualizada = DateTime.Now;
-                avaliacaoAtualizar.Historico.Add(historico);
-                
-                // valida a avaliação atualizada
-                var listaErros = await _alterarAvaliacaoNegocio.Validate(_mapper.Map<Avaliacao>(avaliacaoAtualizar),usuarioLogado.Id);
-                
-                if(listaErros.Count > 0)
-                    throw new BusinessException<CriarAtualizarAvaliacaoDTO>(listaErros.ToArray(),avaliacaoAtualizada);
-                
-                
-                await _avaliacaoRepository.SaveChangesAsync();
-                return _mapper.Map<AvaliacaoUsuarioDTO>(avaliacaoAtualizar);
-                
-            } 
-            catch(NotFoundException e){
-                throw e;
-            }
-            catch(BusinessException<AvaliacaoUsuarioDTO> e){
-                throw e;
-            }
-            catch(Exception e){
-                throw e;
-            }
+            
+            var avaliacaoAtualizar = await _avaliacaoRepository.GetAvaliacaoById(idAvaliacao);
+            if(avaliacaoAtualizar == null)
+                throw new NotFoundException("Não foi encontrada uma avaliação com o id especificado");
+            if(avaliacaoAtualizar.AvaliadorId != usuarioLogado.Id)
+                throw new ForbiddenException("O usuário logado não é o mesmo que criou a avaliação"); 
+            //Salva no histórico
+            HistoricoAvaliacao historico = new();
+            historico.Anonimo = avaliacaoAtualizar.Anonimo;
+            historico.Descricao = avaliacaoAtualizar.Descricao;
+            historico.NotaAmbiente = avaliacaoAtualizar.NotaAmbiente;
+            historico.NotaAtendimento = avaliacaoAtualizar.NotaAtendimento;
+            historico.NotaPreco = avaliacaoAtualizar.NotaPreco;
+            historico.NotaQualidade = avaliacaoAtualizar.NotaQualidade;
+            historico.DataModificacao = DateTime.Now;
+            
+            // Atualiza a avaliação
+            avaliacaoAtualizar.NotaPreco = avaliacaoAtualizada.NotaPreco;
+            avaliacaoAtualizar.NotaAmbiente = avaliacaoAtualizada.NotaAmbiente;
+            avaliacaoAtualizar.NotaQualidade = avaliacaoAtualizada.NotaQualidade;
+            avaliacaoAtualizar.NotaAtendimento = avaliacaoAtualizada.NotaAtendimento;
+            avaliacaoAtualizar.Descricao = avaliacaoAtualizada.Descricao;
+            avaliacaoAtualizar.Anonimo = avaliacaoAtualizada.Anonimo;
+            avaliacaoAtualizar.DataAtualizada = DateTime.Now;
+            historico.AvaliacaoAtual =avaliacaoAtualizar;
+            
+            // valida a avaliação atualizada
+            var listaErros = await _alterarAvaliacaoNegocio.Validate(_mapper.Map<Avaliacao>(avaliacaoAtualizar),usuarioLogado.Id);
+            
+            if(listaErros.Count > 0)
+                throw new BusinessException<AtualizarAvaliacaoDTO>(listaErros.ToArray(),avaliacaoAtualizada);
+            
+            
+            _avaliacaoRepository.Add(historico);
+            await _avaliacaoRepository.SaveChangesAsync();
+            return _mapper.Map<AvaliacaoUsuarioDTO>(avaliacaoAtualizar);
         }
 
-        public async Task<AvaliacaoUsuarioDTO> CriarAvaliacao(CriarAtualizarAvaliacaoDTO avaliacao,Usuario usuarioLogado)
+        public async Task<AvaliacaoUsuarioDTO> CriarAvaliacao(CriarAvaliacaoDTO avaliacao,Usuario usuarioLogado)
         {
-            try{
-                var avaliacaoCriar = _mapper.Map<Avaliacao>(avaliacao);
+            
+            var avaliacaoCriar = _mapper.Map<Avaliacao>(avaliacao);
+
+            var listaErros = await _criarAvaliacaoNegocio.Validate(avaliacaoCriar,usuarioLogado.Id);
+            
+            if(listaErros.Count > 0)
+                throw new BusinessException<CriarAvaliacaoDTO>(listaErros.ToArray(),avaliacao);
+            avaliacaoCriar.Avaliador = usuarioLogado;
+            avaliacaoCriar.DataAtualizada = DateTime.Now;
+            avaliacaoCriar.DataPostada = DateTime.Now;
+            _avaliacaoRepository.Add(avaliacaoCriar);
+            await _avaliacaoRepository.SaveChangesAsync();
+            return _mapper.Map<AvaliacaoUsuarioDTO>(avaliacaoCriar);
                 
-                var listaErros = await _criarAvaliacaoNegocio.Validate(avaliacaoCriar,usuarioLogado.Id);
-                
-                if(listaErros.Count > 0)
-                    throw new BusinessException<CriarAtualizarAvaliacaoDTO>(listaErros.ToArray(),avaliacao);
-                avaliacaoCriar.Avaliador = usuarioLogado;
-                _avaliacaoRepository.Add(avaliacaoCriar);
-                await _avaliacaoRepository.SaveChangesAsync();
-                return _mapper.Map<AvaliacaoUsuarioDTO>(avaliacaoCriar);
-                
-            } 
-            catch(NotFoundException e){
-                throw e;
-            }
-            catch(BusinessException<AvaliacaoUsuarioDTO> e){
-                throw e;
-            }
-            catch(Exception e){
-                throw e;
-            }
+           
         }
 
         public async Task<AvaliacaoUsuarioDTO> DeletarAvaliacao(Guid idAvaliacao,Usuario usuarioLogado)
         {
-            try{
-                var avaliacaoDeletar = await _avaliacaoRepository.GetAvaliacaoById(idAvaliacao);
-                if(avaliacaoDeletar == null)
-                    throw new NotFoundException("Não existe um avaliacao com o id especificado");
-                
-                var avaliacaoRetorno = _mapper.Map<AvaliacaoUsuarioDTO>(avaliacaoDeletar);
-                
-                if(avaliacaoDeletar.UsuarioId != usuarioLogado.Id)
-                    throw new ForbiddenException("O usuário logado não é o mesmo que criou a avaliação"); 
-                
-                avaliacaoDeletar.Deletado = true;
-                
-                await _avaliacaoRepository.SaveChangesAsync();
-                return _mapper.Map<AvaliacaoUsuarioDTO>(avaliacaoRetorno);
-                
+
+            var avaliacaoDeletar = await _avaliacaoRepository.GetAvaliacaoById(idAvaliacao);
+            if(avaliacaoDeletar == null)
+                throw new NotFoundException("Não existe um avaliacao com o id especificado");
+            
+            var avaliacaoRetorno = _mapper.Map<AvaliacaoUsuarioDTO>(avaliacaoDeletar);
+            
+            if(avaliacaoDeletar.AvaliadorId != usuarioLogado.Id)
+                throw new ForbiddenException("O usuário logado não é o mesmo que criou a avaliação"); 
+            
+            avaliacaoDeletar.Deletado = true;
+            if(avaliacaoDeletar.Historico != null){
+                foreach(HistoricoAvaliacao h in avaliacaoDeletar.Historico ){
+                    h.Deletado = true;
+                }
             }
-            catch(NotFoundException e){
-                throw e;
-            }
-            catch(BusinessException<AvaliacaoUsuarioDTO> e){
-                throw e;
-            } 
-            catch(Exception e){
-                throw e;
-            }
+                
+            await _avaliacaoRepository.SaveChangesAsync();
+            return _mapper.Map<AvaliacaoUsuarioDTO>(avaliacaoRetorno);
+          
+        
         }
 
         public async Task<AvaliacaoUsuarioDTO> GetAvaliacaoById(Guid idAvaliacao, bool includeHistorico = true)
         {
-            try{
-                var avaliacao = await _avaliacaoRepository.GetAvaliacaoById(idAvaliacao);
-                if(avaliacao == null)
-                    throw new NotFoundException("Não existe um avaliacao com o id especificado");
-                return _mapper.Map<AvaliacaoUsuarioDTO>(avaliacao);
-            }
-            catch(NotFoundException e){
-                throw e;
-            }
-            catch(Exception e){
-                throw e;
-            }
+        
+            var avaliacao = await _avaliacaoRepository.GetAvaliacaoById(idAvaliacao);
+            if(avaliacao == null)
+                throw new NotFoundException("Não existe um avaliacao com o id especificado");
+            return _mapper.Map<AvaliacaoUsuarioDTO>(avaliacao);
         }
 
         public async Task<AvaliacaoLugarPageDTO> GetAvaliacoesPageByLugar(Guid idLugar, int pageNumber = 0,int pageSize = 10, bool includeHistorico = false)
         {
-            try{
-                var avaliacoes = await _avaliacaoRepository.GetAvaliacoesByLugarPage(pageNumber,idLugar,pageSize,includeHistorico);
+            var avaliacoes = await _avaliacaoRepository.GetAvaliacoesByLugarPage(pageNumber,idLugar,pageSize,includeHistorico);
 
-                return new AvaliacaoLugarPageDTO(){Avaliacoes = _mapper.Map<AvaliacaoLugarDTO[]>(avaliacoes),PageNumber = pageNumber, PageSize = 10};
-            }
-            catch(NotFoundException e){
-                throw e;
-            }
-            catch(Exception e){
-                throw e;
-            }
+            return new AvaliacaoLugarPageDTO(){Avaliacoes = _mapper.Map<AvaliacaoLugarDTO[]>(avaliacoes),PageNumber = pageNumber, PageSize = 10};
+
         }
 
-        public async Task<AvaliacaoUsuarioPageDTO> GetAvaliacoesPageByUsuario(Usuario usuario, int pageNumber = 0,int pageSize = 10, bool includeHistorico = false)
+        public async Task<AvaliacaoUsuarioPageDTO> GetAvaliacoesPageByAvaliador(Usuario usuario, int pageNumber = 0,int pageSize = 10, bool includeHistorico = false)
         {
-            try{
-                var avaliacoes = await _avaliacaoRepository.GetAvaliacoesByUsuario(pageNumber,usuario.Id,pageSize,includeHistorico);
 
-                return new AvaliacaoUsuarioPageDTO(){Avaliacoes = _mapper.Map<AvaliacaoUsuarioDTO[]>(avaliacoes),PageNumber = pageNumber, PageSize = 10};
-            }
-            catch(NotFoundException e){
-                throw e;
-            }
-            catch(Exception e){
-                throw e;
-            }
+            var avaliacoes = await _avaliacaoRepository.GetAvaliacoesByAvaliador(pageNumber,usuario.Id,pageSize,includeHistorico);
+
+            return new AvaliacaoUsuarioPageDTO(){Avaliacoes = _mapper.Map<AvaliacaoUsuarioDTO[]>(avaliacoes),PageNumber = pageNumber, PageSize = 10};
+
         }
     }
 }

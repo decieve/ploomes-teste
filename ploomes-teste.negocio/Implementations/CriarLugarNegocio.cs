@@ -76,10 +76,10 @@ namespace ploomes_teste.negocio.Implementations
 
         public bool ValidateLongitude(double longitude)
         {
-            return longitude <= 180.0 && longitude >= 0.0;
+            return longitude <= 180.0 && longitude >= -180.0;
         }
 
-        public async Task<bool> ValidateTipoLugar(int IdTipoLugar)
+        public async Task<bool> ValidateTipoLugar(short IdTipoLugar)
         {
             try{
                 var tipoLugar = await _tipoLugarRepository.GetTipoLugarById(IdTipoLugar);
@@ -105,7 +105,7 @@ namespace ploomes_teste.negocio.Implementations
             if (! await ValidateCnpjDuplicado(lugar.Cnpj))
                 validationResult.Add("Já existe um lugar com o cnpj especificado");
 
-            if(! await ValidateTipoLugar(lugar.TipoLugar.Id))
+            if(! await ValidateTipoLugar(lugar.TipoLugarId))
                 validationResult.Add("O tipo de lugar especificado não existe.");
 
             return validationResult;

@@ -14,16 +14,23 @@ namespace ploomes_teste.negocio.Implementations
             _avaliacaoRepository = avaliacaoRepository;
             _lugarRepository = lugarRepository;
         }
-        public async Task<bool> ValidateAvaliacaoDuplicada(Guid LugarAvaliacaoId,string UsuarioAvaliacaoId)
+        public async Task<bool> ValidateAvaliacaoDuplicada(Guid LugarAvaliacaoId,string AvaliadorId)
         {
             try{
-                var av = await _avaliacaoRepository.GetAvaliacaoByIdLugarIdUsuario(LugarAvaliacaoId,UsuarioAvaliacaoId);
+                var av = await _avaliacaoRepository.GetAvaliacaoByIdLugarIdAvaliador(LugarAvaliacaoId,AvaliadorId);
                 return av == null;
             }catch(Exception e){
                 throw e;
             }
         }
-
+        public async Task<bool> ValidateLugarExiste(Guid LugarAvaliacaoId){
+            try{
+                var l = await _lugarRepository.GetLugarById(LugarAvaliacaoId);
+                return l != null;
+            }catch(Exception e){
+                throw e;
+            }
+        }
         public bool ValidateNotaAmbiente(double notaAmbiente)
         {
             return notaAmbiente >= 0.0 && notaAmbiente <= 5.0; 
@@ -62,7 +69,8 @@ namespace ploomes_teste.negocio.Implementations
 
             if (! await ValidateAvaliacaoDuplicada(avaliacao.LugarId,idUsuarioLogado))
                 validationResult.Add("O usuário já avaliou o lugar");
-            
+            if (! await ValidateLugarExiste(avaliacao.LugarId))
+                validationResult.Add("O lugar especificado não existe");
             return validationResult;
         }
     }

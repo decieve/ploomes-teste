@@ -6,7 +6,7 @@ namespace ploomes_teste.persistence.Contracts
     {
         Task<Avaliacao> GetAvaliacaoById(Guid id,bool includeHistorico = true);
         Task<Avaliacao[]> GetAvaliacoesByLugarPage(int pageNumber,Guid idLugar,int pageSize = 10,bool includeHistorico = false);
-        Task<Avaliacao[]> GetAvaliacoesByUsuario(int pageNumber,string id_usuario,int pageSize = 10,bool includeHistorico = false);
-        Task<Avaliacao> GetAvaliacaoByIdLugarIdUsuario(Guid idLugar,string idUsuario,bool includeHistorico = false);
+        Task<Avaliacao[]> GetAvaliacoesByAvaliador(int pageNumber,string idAvaliador,int pageSize = 10,bool includeHistorico = false);
+        Task<Avaliacao> GetAvaliacaoByIdLugarIdAvaliador(Guid idLugar,string idAvaliador,bool includeHistorico = false);
     }
 }

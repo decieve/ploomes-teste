@@ -7,14 +7,11 @@ namespace ploomes_teste.negocio.Implementations
 {
     public class AlterarAvaliacaoNegocio : IAlterarAvaliacaoNegocio
     {   
-        private Usuario _usuarioLogado {get;set;}
 
-        private Avaliacao _avaliacao {get;set;}
         private IAvaliacaoRepository _avaliacaoRepository {get;set;}
         private ILugarRepository _lugarRepository {get;set;}
-        public AlterarAvaliacaoNegocio(Usuario usuario,Avaliacao avaliacao,IAvaliacaoRepository avaliacaoRepository, ILugarRepository lugarRepository){
-            _usuarioLogado = usuario;
-            _avaliacao = avaliacao;
+        public AlterarAvaliacaoNegocio(IAvaliacaoRepository avaliacaoRepository, ILugarRepository lugarRepository){
+
             _avaliacaoRepository = avaliacaoRepository;
             _lugarRepository = lugarRepository;
         }

@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using ploomes_teste.domain;
 using ploomes_teste.persistence.Contexts;
 using ploomes_teste.persistence.Contracts;
 
@@ -9,7 +10,7 @@ namespace ploomes_teste.persistence.Implementations
         public TipoLugarRepository(PloomesContext ploomesContext) : base(ploomesContext)
         {
         }
-        public async Task<TipoLugar> GetTipoLugarById(int id)
+        public async Task<TipoLugar> GetTipoLugarById(short id)
         {
             var main_query = from tipoLugar in _context.TiposLugar
                             where tipoLugar.Id == id

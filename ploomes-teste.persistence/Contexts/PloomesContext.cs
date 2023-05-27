@@ -9,6 +9,7 @@ namespace ploomes_teste.persistence.Contexts
         public PloomesContext(DbContextOptions<PloomesContext> options)
                     : base(options)
         {
+            
         }
 
         public DbSet<Avaliacao> Avaliacoes { get; set; }
@@ -17,17 +18,25 @@ namespace ploomes_teste.persistence.Contexts
         public DbSet<TipoLugar> TiposLugar{get;set;}
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Lugar>().HasIndex(e => e.Cnpj).IsUnique();
+            base.OnModelCreating(modelBuilder);
             
-            modelBuilder.Entity<Lugar>().HasOne(e => e.Proprietario).WithMany(l => l.Lugares).HasForeignKey(e => e.UsuarioId);
+            modelBuilder.Entity<Lugar>().HasOne(e => e.Proprietario).WithMany(l => l.Lugares).HasForeignKey(e => e.ProprietarioId).OnDelete(DeleteBehavior.Restrict);
             
+            modelBuilder.Entity<TipoLugar>().HasData(Enum.GetValues(typeof(TipoLugarEnum))
+                .Cast<TipoLugarEnum>()
+                .Select(e => new TipoLugar
+                {
+                    Id = (short)e,
+                    Nome = e.ToString()
+                }));
             
-            
-            modelBuilder.Entity<Avaliacao>().HasOne(e => e.Lugar).WithMany(l => l.Avaliacoes).HasForeignKey(e => e.LugarId);
-            
-            modelBuilder.Entity<Avaliacao>().HasOne(e => e.Avaliador).WithMany(l => l.Avaliacoes).HasForeignKey(e => e.UsuarioId);
+            modelBuilder.Entity<Lugar>().HasOne(e => e.TipoLugar).WithMany(t => t.Lugares).HasForeignKey(l => l.TipoLugarId).OnDelete(DeleteBehavior.Restrict);
 
-            modelBuilder.Entity<Avaliacao>().HasIndex(e => new {e.LugarId, e.UsuarioId}).IsUnique();
+            modelBuilder.Entity<Avaliacao>().HasOne(e => e.Lugar).WithMany(l => l.Avaliacoes).HasForeignKey(e => e.LugarId).OnDelete(DeleteBehavior.Restrict);
+            
+            modelBuilder.Entity<Avaliacao>().HasOne(e => e.Avaliador).WithMany(l => l.Avaliacoes).HasForeignKey(e => e.AvaliadorId).OnDelete(DeleteBehavior.Restrict);
+
+            
 
 
 

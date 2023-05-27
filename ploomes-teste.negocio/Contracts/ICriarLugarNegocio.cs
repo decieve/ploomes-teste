@@ -9,7 +9,7 @@ namespace ploomes_teste.negocio.Contracts
         bool ValidateLongitude(double longitude);
         bool ValidateCnpj(string cnpj);
         Task<bool> ValidateCnpjDuplicado(string cnpj);
-        Task<bool> ValidateTipoLugar(int IdTipoLugar);
+        Task<bool> ValidateTipoLugar(short IdTipoLugar);
         Task<List<string>> Validate(Lugar lugar,string idUsuarioLogado);
 
     }

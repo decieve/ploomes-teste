@@ -12,7 +12,8 @@ namespace ploomes_teste.application.Helpers
             CreateMap<Avaliacao,AvaliacaoLugarDTO>()
                 .ForMember(d => d.NomeAvaliador,
                         map => map.MapFrom(i => i.Anonimo ? "Anônimo" : i.Avaliador.NomeCompleto));
-            CreateMap<CriarAtualizarAvaliacaoDTO, Avaliacao>();
+            CreateMap<CriarAvaliacaoDTO, Avaliacao>();
+            CreateMap<AtualizarAvaliacaoDTO, Avaliacao>();
             CreateMap<HistoricoAvaliacao,HistoricoAvaliacaoDTO>();
         }
     }

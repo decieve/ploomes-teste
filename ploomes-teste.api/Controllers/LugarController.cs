@@ -16,8 +16,9 @@ namespace ploomes_teste.api.Controllers
     {
         private readonly ILugarService _lugarService;
         private readonly UserManager<Usuario> _userManager;
-        public LugarController(ILugarService lugarService){
+        public LugarController(ILugarService lugarService,UserManager<Usuario> userManager){
             _lugarService = lugarService;
+            _userManager = userManager;
         }
         
         [Authorize(Roles = "Proprietario")]
@@ -30,6 +31,9 @@ namespace ploomes_teste.api.Controllers
 
                 var lugarCriado = await _lugarService.CriarLugar(criarLugarDTO,user);
                 return Ok(lugarCriado);
+            }
+            catch(BusinessException<CriarLugarDTO> e){
+                return BadRequest(e.messages);
             }
             catch(Exception e){
                 return Problem("Algo deu errado");
@@ -46,11 +50,14 @@ namespace ploomes_teste.api.Controllers
                 var lugarAtualizar = await _lugarService.AtualizarLugar(atualizarLugarDTO,idLugar,user);
                 return Ok(lugarAtualizar);
             }
+            catch(BusinessException<AtualizarLugarDTO> e){
+                return BadRequest(e.messages);
+            }
             catch(NotFoundException e){
                 return NotFound(e.Message);
             }
             catch(ForbiddenException e){
-                return Forbid(e.Message);
+                return new ObjectResult(e.Message) { StatusCode = 403};
             }
             catch(Exception e){
                 return Problem("Algo deu errado");
@@ -61,9 +68,6 @@ namespace ploomes_teste.api.Controllers
         [Route("page/{pageNumber}")]
         public async Task<IActionResult> GetLugaresPage(int pageNumber){
             try{
-                ClaimsPrincipal principal = HttpContext.User as ClaimsPrincipal;
-                var user = await _userManager.GetUserAsync(principal);
-
                 var lugarPage = await _lugarService.GetLugaresPage(pageNumber);
                 return Ok(lugarPage);
             }
@@ -74,12 +78,27 @@ namespace ploomes_teste.api.Controllers
         [Authorize(Roles = "Proprietario")]
         [HttpGet]
         [Route("proprietario/page/{pageNumber}")]
-        public async Task<IActionResult> GetLugaresPageByUsuario(int pageNumber,string idUsuario){
+        public async Task<IActionResult> GetLugaresPageByProprietario(int pageNumber){
             try{
                 ClaimsPrincipal principal = HttpContext.User as ClaimsPrincipal;
                 var user = await _userManager.GetUserAsync(principal);
 
-                var lugarPage = await _lugarService.GetLugaresPageByUsuario(user,pageNumber);
+                var lugarPage = await _lugarService.GetLugaresPageByProprietario(user,pageNumber);
+                return Ok(lugarPage);
+            }
+            catch(Exception e){
+                return Problem("Algo deu errado");
+            }
+        }
+        [Authorize(Roles = "Avaliador")]
+        [HttpGet]
+        [Route("avaliador/localizacao/page/{pageNumber}")]
+        public async Task<IActionResult> GetLugaresPageByLocalizacaoAvaliador(int pageNumber){
+            try{
+                ClaimsPrincipal principal = HttpContext.User as ClaimsPrincipal;
+                var user = await _userManager.GetUserAsync(principal);
+
+                var lugarPage = await _lugarService.GetLugaresPageByLocalizacaoAvaliador(user,pageNumber);
                 return Ok(lugarPage);
             }
             catch(Exception e){
@@ -102,6 +121,18 @@ namespace ploomes_teste.api.Controllers
             }
             catch(ForbiddenException e){
                 return Forbid(e.Message);
+            }
+            catch(Exception e){
+                return Problem("Algo deu errado");
+            }
+        }
+        [AllowAnonymous]
+        [HttpGet]
+        [Route("tipos")]
+        public async Task<IActionResult> GetTiposLugares(){
+            try{
+                var tiposLugares = await _lugarService.GetTiposLugares();
+                return Ok(tiposLugares);
             }
             catch(Exception e){
                 return Problem("Algo deu errado");
