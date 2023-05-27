@@ -10,5 +10,9 @@
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="12.0.1" />
   </ItemGroup>
-
+  <ItemGroup>
+    <ProjectReference Include="..\ploomes-teste.domain\ploomes-teste.domain.csproj" />
+    <ProjectReference Include="..\ploomes-teste.persistence\ploomes-teste.persistence.csproj" />
+     <ProjectReference Include="..\ploomes-teste.negocio\ploomes-teste.negocio.csproj" />
+  </ItemGroup>
 </Project>

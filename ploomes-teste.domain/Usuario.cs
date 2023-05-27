@@ -11,10 +11,9 @@ namespace ploomes_teste.domain
         public virtual ICollection<Lugar> Lugares{get;set;}
         // Apenas disponivel para Avaliadores
         public virtual ICollection<Avaliacao> Avaliacoes { get; set; }
-        // Apenas disponivel para Avaliadores
-        public double LatitudeMoradia {get;set;}
-        // Apenas disponivel para Avaliadores
-        public double LongitudeMoradia {get;set;}
+        
+        public double? LatitudeMoradia {get;set;}
+        public double? LongitudeMoradia {get;set;}
         [Required]
         public string NomeCompleto{get;set;}
         [Required]

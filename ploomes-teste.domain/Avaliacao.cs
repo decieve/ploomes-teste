@@ -5,7 +5,7 @@ namespace ploomes_teste.domain
 {
     public class Avaliacao {
         [Key]
-        public Guid Uuid { get; set; }
+        public Guid Id { get; set; }
         [Required]
         public double NotaAmbiente { get; set; }
         [Required]
@@ -15,14 +15,20 @@ namespace ploomes_teste.domain
         [Required]
         public double NotaPreco {get;set;}
         [MaxLength(500)]
-        public string Descricao {get;set;}
+        public string? Descricao {get;set;}
         [Required]
         public bool Anonimo {get;set;}
         [Required]
         public bool Deletado{get;set;}
         [Required]
         public DateTime DataPostada {get;set;}
+        [Required]
         public DateTime DataAtualizada {get;set;}
+        [Required]
+        public string UsuarioId{get;set;}
+        [Required]
+        public Guid LugarId{get;set;}
+        
         [Required]
         public virtual Usuario Usuario {get;set;}
         [Required]

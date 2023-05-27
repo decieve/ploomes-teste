@@ -6,5 +6,11 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
   </PropertyGroup>
-
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.6" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ploomes-teste.domain\ploomes-teste.domain.csproj" />
+    <ProjectReference Include="..\ploomes-teste.persistence\ploomes-teste.persistence.csproj" />
+  </ItemGroup>
 </Project>

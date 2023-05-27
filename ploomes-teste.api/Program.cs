@@ -48,7 +48,7 @@ builder.Services.AddScoped<ILugarService, LugarService>();
 builder.Services.AddScoped<ICriarAvaliacaoNegocio, CriarAvaliacaoNegocio>();
 builder.Services.AddScoped<IAlterarAvaliacaoNegocio, AlterarAvaliacaoNegocio>();
 builder.Services.AddScoped<ICriarLugarNegocio, CriarLugarNegocio>();
-
+builder.Services.AddScoped<IAlterarLugarNegocio, AlterarLugarNegocio>();
 
 builder.Services.AddScoped<ILugarService, LugarService>();
 
@@ -101,8 +101,8 @@ builderIdentity.AddRoleManager<RoleManager<IdentityRole>>();
 builderIdentity.AddSignInManager<SignInManager<Usuario>>();
 builder.Services.ConfigureApplicationCookie(options =>
 {
-    options.LoginPath = new PathString("/account/login");
-    options.AccessDeniedPath = new PathString("/account/login");
+    options.LoginPath = new PathString("/usuario/login");
+    options.AccessDeniedPath = new PathString("/usuario/login");
 
     options.Events.OnRedirectToLogin = context =>
     {

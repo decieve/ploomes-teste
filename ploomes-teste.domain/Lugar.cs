@@ -5,7 +5,7 @@ namespace ploomes_teste.domain
     public class Lugar
     {
         [Key]
-        public Guid Uuid {get;set;}
+        public Guid Id {get;set;}
         [Required]
         public double Latitude {get;set;}
         [Required]
@@ -16,6 +16,11 @@ namespace ploomes_teste.domain
         public bool Deletado{get;set;}
         [Required]
         public string Cnpj{get;set;}
+        [Required]
+        public string UsuarioId { get; set; }
+        [Required]
+        public virtual TipoLugar TipoLugar {get;set;}
+        public virtual Usuario Usuario {get;set;}
         public virtual ICollection<Avaliacao> Avaliacoes{get;set;}
     }
 }

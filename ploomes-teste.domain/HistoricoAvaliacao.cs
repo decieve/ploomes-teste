@@ -5,7 +5,7 @@ namespace ploomes_teste.domain
     public class HistoricoAvaliacao
     {
         [Key]
-        public Guid Uuid { get; set; }
+        public Guid Id { get; set; }
         [Required]
         public double NotaAmbiente { get; set; }
         [Required]
@@ -17,8 +17,6 @@ namespace ploomes_teste.domain
         public string Descricao {get;set;}
         [Required]
         public bool Anonimo {get;set;}
-        [Required]
-        public DateTime DataPostada {get;set;}
         [Required]
         public DateTime DataModificacao{get;set;}
         [Required]

@@ -10,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using ploomes_teste.application.DTOs;
+using ploomes_teste.application.DTOs.Usuario;
 using ploomes_teste.domain;
 
 namespace ploomes_teste.api.Controllers;
@@ -38,7 +39,7 @@ public class UsuarioController : ControllerBase
         _roleManager = roleManager;
     }
 
-    [Route("getuser")]
+    [Route("get")]
     [HttpGet]
     public async Task<IActionResult> GetUser()
     {
@@ -70,6 +71,7 @@ public class UsuarioController : ControllerBase
                 UserName = userDTO.UserName,
                 Email = userDTO.Email,
                 NomeCompleto = userDTO.NomeCompleto
+                
             };
 
             var result = await _userManager.CreateAsync(user, userDTO.Password);
@@ -106,7 +108,9 @@ public class UsuarioController : ControllerBase
             {
                 UserName = userDTO.UserName,
                 Email = userDTO.Email,
-                NomeCompleto = userDTO.NomeCompleto
+                NomeCompleto = userDTO.NomeCompleto,
+                LatitudeMoradia = userDTO.Latitude,
+                LongitudeMoradia = userDTO.Longitude
             };
 
             var result = await _userManager.CreateAsync(user, userDTO.Password);
