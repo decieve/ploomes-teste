@@ -68,7 +68,7 @@ namespace ploomes_teste.application.Services.Implementations
                 
                 if(listaErros.Count > 0)
                     throw new BusinessException<CriarLugarDTO>(listaErros.ToArray(),lugar);
-
+                lugarCriar.Proprietario = usuarioLogado;
                 _lugarRepository.Add(lugarCriar);
                 await _lugarRepository.SaveChangesAsync();
                 return _mapper.Map<LugarDTO>(lugarCriar);

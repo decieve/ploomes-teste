@@ -20,7 +20,7 @@ namespace ploomes_teste.persistence.Implementations
 
             return await main_query
                     .Include(l => l.TipoLugar)
-                    .Include(l => l.Avaliacoes).ThenInclude(a => a.Usuario)
+                    .Include(l => l.Avaliacoes).ThenInclude(a => a.Avaliador)
                     .FirstOrDefaultAsync();
         }
 
@@ -32,7 +32,7 @@ namespace ploomes_teste.persistence.Implementations
 
             return await main_query
                         .Include(l => l.TipoLugar)
-                        .Include(l => l.Avaliacoes).ThenInclude(a => a.Usuario)
+                        .Include(l => l.Avaliacoes).ThenInclude(a => a.Avaliador)
                         .FirstOrDefaultAsync();
         }
 
@@ -46,7 +46,7 @@ namespace ploomes_teste.persistence.Implementations
                 .Skip(pageSize * (pageNumber-1))
                 .Take(pageSize)
                 .Include(l => l.TipoLugar)
-                .Include(l => l.Avaliacoes).ThenInclude(a => a.Usuario)
+                .Include(l => l.Avaliacoes).ThenInclude(a => a.Avaliador)
                 .ToArrayAsync();
         }
 
@@ -59,7 +59,7 @@ namespace ploomes_teste.persistence.Implementations
                 .Skip(pageSize * (pageNumber-1))
                 .Take(pageSize)
                 .Include(l => l.TipoLugar)
-                .Include(l => l.Avaliacoes).ThenInclude(a => a.Usuario)
+                .Include(l => l.Avaliacoes).ThenInclude(a => a.Avaliador)
                 .ToArrayAsync();
         }
     }

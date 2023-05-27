@@ -19,13 +19,15 @@ namespace ploomes_teste.persistence.Implementations
             if(includeHistorico)
                 main_query.Include(a => a.Historico);
 
-            return await main_query.FirstOrDefaultAsync();
+            return await main_query
+                        .Include(a => a.Avaliador)
+                        .FirstOrDefaultAsync();
         }
 
         public async Task<Avaliacao[]> GetAvaliacoesByUsuario(int pageNumber, string idUsuario, int pageSize = 10, bool includeHistorico = false)
         {
             var main_query = from avaliacao in _context.Avaliacoes
-                            where avaliacao.Usuario.Id == idUsuario
+                            where avaliacao.Avaliador.Id == idUsuario
                             orderby avaliacao.DataAtualizada descending
                             select avaliacao;
 
@@ -33,6 +35,7 @@ namespace ploomes_teste.persistence.Implementations
                 main_query.Include(a => a.Historico);
                 
             return await main_query
+                .Include(a => a.Avaliador)
                 .Skip(pageSize * (pageNumber-1))
                 .Take(pageSize)
                 .ToArrayAsync();
@@ -49,7 +52,7 @@ namespace ploomes_teste.persistence.Implementations
                 main_query.Include(a => a.Historico);
                 
             return await main_query
-                .Include(a => a.Usuario)
+                .Include(a => a.Avaliador)
                 .Skip(pageSize * (pageNumber-1))
                 .Take(pageSize)
                 .ToArrayAsync();
@@ -63,7 +66,9 @@ namespace ploomes_teste.persistence.Implementations
             if(includeHistorico)
                 main_query.Include(a => a.Historico);
 
-            return await main_query.FirstOrDefaultAsync();
+            return await main_query
+                        .Include(a => a.Avaliador)
+                        .FirstOrDefaultAsync();
         }
     }
 }

@@ -19,7 +19,7 @@ namespace ploomes_teste.api.Controllers;
 [Route("[controller]")]
 public class UsuarioController : ControllerBase
 {
-     private readonly IConfiguration _config;
+    private readonly IConfiguration _config;
     private readonly SignInManager<Usuario> _signInManager;
     private readonly UserManager<Usuario> _userManager;
     private readonly RoleManager<IdentityRole> _roleManager;

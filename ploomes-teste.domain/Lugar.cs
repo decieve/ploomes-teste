@@ -20,7 +20,7 @@ namespace ploomes_teste.domain
         public string UsuarioId { get; set; }
         [Required]
         public virtual TipoLugar TipoLugar {get;set;}
-        public virtual Usuario Usuario {get;set;}
+        public virtual Usuario Proprietario {get;set;}
         public virtual ICollection<Avaliacao> Avaliacoes{get;set;}
     }
 }

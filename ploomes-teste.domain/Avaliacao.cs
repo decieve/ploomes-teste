@@ -30,7 +30,7 @@ namespace ploomes_teste.domain
         public Guid LugarId{get;set;}
         
         [Required]
-        public virtual Usuario Usuario {get;set;}
+        public virtual Usuario Avaliador {get;set;}
         [Required]
         public virtual Lugar Lugar { get; set; }
         public virtual ICollection<HistoricoAvaliacao> Historico {get;set;} 

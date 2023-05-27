@@ -19,7 +19,7 @@ namespace ploomes_teste.application.DTOs.Usuario
         [Required(ErrorMessage = "É necessário preencher o campo {0}.")]
         [MinLength(4,ErrorMessage = "O nome completo precisa ter mais que 4 caracteres. (possui {1})")]
         [MaxLength(100,ErrorMessage = "O nome completo não pode ter mais que 100 caracteres. (possui {1})")]
-        [RegularExpression(@"^[a-zA-Z0-9áãàâéèêíìîóõòôúùû]+$", ErrorMessage = "O nome completo possui caracteres não aceitos.")]
+        [RegularExpression(@"^[a-zA-Záãàâéèêíìîóõòôúùûç]+$", ErrorMessage = "O nome completo possui caracteres não aceitos.")]
         public string NomeCompleto {get;set;}
 
         public double? Latitude {get;set;}

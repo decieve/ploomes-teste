@@ -77,7 +77,7 @@ namespace ploomes_teste.application.Services.Implementations
                 
                 if(listaErros.Count > 0)
                     throw new BusinessException<CriarAtualizarAvaliacaoDTO>(listaErros.ToArray(),avaliacao);
-
+                avaliacaoCriar.Avaliador = usuarioLogado;
                 _avaliacaoRepository.Add(avaliacaoCriar);
                 await _avaliacaoRepository.SaveChangesAsync();
                 return _mapper.Map<AvaliacaoUsuarioDTO>(avaliacaoCriar);
@@ -154,10 +154,10 @@ namespace ploomes_teste.application.Services.Implementations
             }
         }
 
-        public async Task<AvaliacaoUsuarioPageDTO> GetAvaliacoesPageByUsuario(string idUsuario, int pageNumber = 0,int pageSize = 10, bool includeHistorico = false)
+        public async Task<AvaliacaoUsuarioPageDTO> GetAvaliacoesPageByUsuario(Usuario usuario, int pageNumber = 0,int pageSize = 10, bool includeHistorico = false)
         {
             try{
-                var avaliacoes = await _avaliacaoRepository.GetAvaliacoesByUsuario(pageNumber,idUsuario,pageSize,includeHistorico);
+                var avaliacoes = await _avaliacaoRepository.GetAvaliacoesByUsuario(pageNumber,usuario.Id,pageSize,includeHistorico);
 
                 return new AvaliacaoUsuarioPageDTO(){Avaliacoes = _mapper.Map<AvaliacaoUsuarioDTO[]>(avaliacoes),PageNumber = pageNumber, PageSize = 10};
             }

@@ -78,6 +78,7 @@ builder.Services.AddControllers(options =>
 builder.Services.AddIdentity<Usuario, IdentityRole>()
     .AddEntityFrameworkStores<PloomesContext>()
     .AddDefaultTokenProviders();
+    
 var key = Encoding.ASCII.GetBytes(builder.Configuration.GetSection("AppSettings:Token").Value);
 
 builder.Services.AddDbContext<PloomesContext>(options =>
@@ -163,7 +164,7 @@ if (app.Environment.IsDevelopment())
     );
     app.UseDeveloperExceptionPage();
     app.UseSwagger();
-    app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "backend v1"));
+    app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "ploomes v1"));
 }else{
     app.UseCors();
     app.UseHsts();
