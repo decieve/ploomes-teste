@@ -270,9 +270,6 @@ namespace ploomes_teste.api.Controllers
         [ProducesResponseType(typeof(void), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(string), StatusCodes.Status500InternalServerError)]
-        [Authorize(Roles = "Proprietario")]
-        [HttpDelete]
-        [Route("deletar/{idLugar}")]
         public async Task<IActionResult> CriarLugar(Guid idLugar){
             try{
                 ClaimsPrincipal principal = HttpContext.User as ClaimsPrincipal;
@@ -307,6 +304,11 @@ namespace ploomes_teste.api.Controllers
         /// </remarks>
         /// <response code="200">Retorna uma lista dos tipos de lugares.</response>
         /// <response code="500">Se ocorrer um erro inesperado.</response>
+        [AllowAnonymous]
+        [HttpGet]
+        [Route("tipos")]
+        [ProducesResponseType(typeof(TipoLugarDTO), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetTiposLugares(){
             try{
                 var tiposLugares = await _lugarService.GetTiposLugares();
