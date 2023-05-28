@@ -23,6 +23,7 @@ using ploomes_teste.application.Services.Implementations;
 using ploomes_teste.application.Services.Contracts;
 using ploomes_teste.negocio.Contracts;
 using ploomes_teste.negocio.Implementations;
+using System.Reflection;
 
 async Task CreateRoles(IServiceProvider serviceProvider)
 {
@@ -50,7 +51,23 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(s =>
+            {
+                s.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo
+                {
+                    Version = "v1",
+                    Title = "Ploomes Teste - Avaliação de lugares",
+                    Description = "Api RESTful para cadastrar e avaliar lugares",
+                    Contact = new Microsoft.OpenApi.Models.OpenApiContact
+                    {
+                        Name = "Martan Martins",
+                        Url = new Uri("https://github.com/decieve/")
+                    }
+                });
+                var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+                s.IncludeXmlComments(xmlPath);
+            });
 
 // Injeção de dependencia
 
@@ -128,6 +145,19 @@ builder.Services.ConfigureApplicationCookie(options =>
     options.Events.OnRedirectToLogin = context =>
     {
         context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+        byte[] byteArray = Encoding.UTF8.GetBytes("Usuário não autenticado.");
+
+        MemoryStream stream = new MemoryStream(byteArray);
+        context.Response.Body= stream;
+        return Task.CompletedTask;
+    };
+    options.Events.OnRedirectToAccessDenied = context =>
+    {
+        context.Response.StatusCode = StatusCodes.Status403Forbidden;
+        byte[] byteArray = Encoding.UTF8.GetBytes("O usuário não possui o papel correto para realizar a requisição.");
+
+        MemoryStream stream = new MemoryStream(byteArray);
+        context.Response.Body= stream;
         return Task.CompletedTask;
     };
 });
@@ -147,17 +177,33 @@ builder.Services.AddAuthentication(x =>
         ValidateIssuer = false,
         ValidateAudience = false
     };
+    x.Events = new JwtBearerEvents
+    {
+        OnAuthenticationFailed = async context =>
+        {
+            context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+            byte[] byteArray = Encoding.UTF8.GetBytes("Usuário não autenticado.");
+
+            MemoryStream stream = new MemoryStream(byteArray);
+            await context.Response.Body.WriteAsync(byteArray, 0, byteArray.Length);
+
+        },
+        OnForbidden = async context =>{
+            context.Response.StatusCode = StatusCodes.Status403Forbidden;
+            byte[] byteArray = Encoding.UTF8.GetBytes("Usuário não possui o papel necessário para realizar a requisição.");
+
+            MemoryStream stream = new MemoryStream(byteArray);
+            await context.Response.Body.WriteAsync(byteArray, 0, byteArray.Length);  
+        }
+    };
+
 });
-		
+
+
+
 var app = builder.Build();
 using var scope = app.Services.CreateScope();
 CreateRoles(scope.ServiceProvider).Wait();
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
 app.UseForwardedHeaders(new ForwardedHeadersOptions
 {
     ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
@@ -172,7 +218,11 @@ if (app.Environment.IsDevelopment())
     );
     app.UseDeveloperExceptionPage();
     app.UseSwagger();
-    app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "ploomes v1"));
+    app.UseSwaggerUI(c => 
+    {
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "ploomes v1");
+        c.RoutePrefix = string.Empty;
+    });
 }else{
     app.UseCors();
     app.UseHsts();

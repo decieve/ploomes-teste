@@ -106,24 +106,28 @@ namespace ploomes_teste.application.Services.Implementations
 
         public async Task<AvaliacaoUsuarioDTO> GetAvaliacaoById(Guid idAvaliacao, bool includeHistorico = true)
         {
-        
+            
             var avaliacao = await _avaliacaoRepository.GetAvaliacaoById(idAvaliacao);
             if(avaliacao == null)
                 throw new NotFoundException("Não existe um avaliacao com o id especificado");
             return _mapper.Map<AvaliacaoUsuarioDTO>(avaliacao);
         }
 
-        public async Task<AvaliacaoLugarPageDTO> GetAvaliacoesPageByLugar(Guid idLugar, int pageNumber = 0,int pageSize = 10, bool includeHistorico = false)
+        public async Task<AvaliacaoLugarPageDTO> GetAvaliacoesPageByLugar(Guid idLugar, int pageNumber,int pageSize = 10, bool includeHistorico = false)
         {
+            if(pageNumber < 1)
+                throw new InvalidPageException("O número da página deve ser maior que 0");
             var avaliacoes = await _avaliacaoRepository.GetAvaliacoesByLugarPage(pageNumber,idLugar,pageSize,includeHistorico);
 
             return new AvaliacaoLugarPageDTO(){Avaliacoes = _mapper.Map<AvaliacaoLugarDTO[]>(avaliacoes),PageNumber = pageNumber, PageSize = 10};
 
         }
 
-        public async Task<AvaliacaoUsuarioPageDTO> GetAvaliacoesPageByAvaliador(Usuario usuario, int pageNumber = 0,int pageSize = 10, bool includeHistorico = false)
+        public async Task<AvaliacaoUsuarioPageDTO> GetAvaliacoesPageByAvaliador(Usuario usuario, int pageNumber,int pageSize = 10, bool includeHistorico = false)
         {
-
+            if(pageNumber < 1)
+                throw new InvalidPageException("O número da página deve ser maior que 0");
+            
             var avaliacoes = await _avaliacaoRepository.GetAvaliacoesByAvaliador(pageNumber,usuario.Id,pageSize,includeHistorico);
 
             return new AvaliacaoUsuarioPageDTO(){Avaliacoes = _mapper.Map<AvaliacaoUsuarioDTO[]>(avaliacoes),PageNumber = pageNumber, PageSize = 10};

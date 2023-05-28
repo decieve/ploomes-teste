@@ -28,7 +28,7 @@ public class UsuarioController : ControllerBase
             ClaimsPrincipal principal = HttpContext.User as ClaimsPrincipal;
 
             var user = await _usuarioService.GetUser(principal);
-
+   
             return Ok(user);
         }
         catch(UnauthorizedException e){

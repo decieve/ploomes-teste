@@ -28,9 +28,13 @@ namespace ploomes_teste.api.Controllers
             try{
                 ClaimsPrincipal principal = HttpContext.User as ClaimsPrincipal;
                 var user = await _userManager.GetUserAsync(principal);
-
+                if(user == null)
+                    throw new UnauthorizedException("Token inválido");
                 var lugarCriado = await _lugarService.CriarLugar(criarLugarDTO,user);
                 return Ok(lugarCriado);
+            }
+            catch(UnauthorizedException e){
+                return Unauthorized(e.Message);
             }
             catch(BusinessException<CriarLugarDTO> e){
                 return BadRequest(e.messages);
@@ -46,9 +50,13 @@ namespace ploomes_teste.api.Controllers
             try{
                 ClaimsPrincipal principal = HttpContext.User as ClaimsPrincipal;
                 var user = await _userManager.GetUserAsync(principal);
-
+                if(user == null)
+                    throw new UnauthorizedException("Token inválido");
                 var lugarAtualizar = await _lugarService.AtualizarLugar(atualizarLugarDTO,idLugar,user);
                 return Ok(lugarAtualizar);
+            }
+            catch(UnauthorizedException e){
+                return Unauthorized(e.Message);
             }
             catch(BusinessException<AtualizarLugarDTO> e){
                 return BadRequest(e.messages);
@@ -71,6 +79,9 @@ namespace ploomes_teste.api.Controllers
                 var lugarPage = await _lugarService.GetLugaresPage(pageNumber);
                 return Ok(lugarPage);
             }
+            catch(InvalidPageException e){
+                return BadRequest(new string[]{e.Message});
+            }
             catch(Exception e){
                 return Problem("Algo deu errado");
             }
@@ -82,9 +93,16 @@ namespace ploomes_teste.api.Controllers
             try{
                 ClaimsPrincipal principal = HttpContext.User as ClaimsPrincipal;
                 var user = await _userManager.GetUserAsync(principal);
-
+                if(user == null)
+                    throw new UnauthorizedException("Token inválido");
                 var lugarPage = await _lugarService.GetLugaresPageByProprietario(user,pageNumber);
                 return Ok(lugarPage);
+            }
+            catch(UnauthorizedException e){
+                return Unauthorized(e.Message);
+            }
+            catch(InvalidPageException e){
+                return BadRequest(new string[]{e.Message});
             }
             catch(Exception e){
                 return Problem("Algo deu errado");
@@ -97,9 +115,16 @@ namespace ploomes_teste.api.Controllers
             try{
                 ClaimsPrincipal principal = HttpContext.User as ClaimsPrincipal;
                 var user = await _userManager.GetUserAsync(principal);
-
+                if(user == null)
+                    throw new UnauthorizedException("Token inválido");
                 var lugarPage = await _lugarService.GetLugaresPageByLocalizacaoAvaliador(user,pageNumber);
                 return Ok(lugarPage);
+            }
+            catch(UnauthorizedException e){
+                return Unauthorized(e.Message);
+            }
+            catch(InvalidPageException e){
+                return BadRequest(new string[]{e.Message});
             }
             catch(Exception e){
                 return Problem("Algo deu errado");
@@ -112,9 +137,13 @@ namespace ploomes_teste.api.Controllers
             try{
                 ClaimsPrincipal principal = HttpContext.User as ClaimsPrincipal;
                 var user = await _userManager.GetUserAsync(principal);
-
+                if(user == null)
+                    throw new UnauthorizedException("Token inválido");
                 var lugarDeletado = await _lugarService.DeletarLugar(idLugar,user);
                 return Ok(lugarDeletado);
+            }
+            catch(UnauthorizedException e){
+                return Unauthorized(e.Message);
             }
             catch(NotFoundException e){
                 return NotFound(e.Message);

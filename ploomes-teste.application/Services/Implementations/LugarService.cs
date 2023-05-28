@@ -96,9 +96,10 @@ namespace ploomes_teste.application.Services.Implementations
            
         }
 
-        public async Task<LugarPageDTO> GetLugaresPage(int pageNumber,int pageSize = 10)
+        public async Task<LugarPageDTO> GetLugaresPage(int pageNumber ,int pageSize = 10)
         {
-            
+            if(pageNumber < 1)
+                throw new InvalidPageException("O número da página deve ser maior que 0");
             var lugares = await _lugarRepository.GetLugaresPage(pageNumber);
             
             return new LugarPageDTO(){Lugares = _mapper.Map<LugarDTO[]>(lugares),PageNumber = pageNumber, PageSize = 10};
@@ -107,7 +108,8 @@ namespace ploomes_teste.application.Services.Implementations
 
         public async Task<LugarPageDTO> GetLugaresPageByProprietario(Usuario usuarioLogado, int pageNumber,int pageSize = 10)
         {
-            
+            if(pageNumber < 1)
+                throw new InvalidPageException("O número da página deve ser maior que 0");
             var lugares = await _lugarRepository.GetLugaresByProprietario(pageNumber,usuarioLogado.Id,pageSize);
             
             return new LugarPageDTO(){Lugares = _mapper.Map<LugarDTO[]>(lugares),PageNumber = pageNumber, PageSize = 10};
@@ -115,6 +117,8 @@ namespace ploomes_teste.application.Services.Implementations
         }
         public async Task<LugarPageDTO> GetLugaresPageByLocalizacaoAvaliador(Usuario usuarioLogado, int pageNumber,int pageSize = 10)
         {
+            if(pageNumber < 1)
+                throw new InvalidPageException("O número da página deve ser maior que 0");
             var lugares = await _lugarRepository.GetLugaresByDistanciaAvaliador(pageNumber,usuarioLogado.LatitudeMoradia.Value,usuarioLogado.LongitudeMoradia.Value,pageSize);
             
             return new LugarPageDTO(){Lugares = _mapper.Map<LugarDTO[]>(lugares),PageNumber = pageNumber, PageSize = 10};
