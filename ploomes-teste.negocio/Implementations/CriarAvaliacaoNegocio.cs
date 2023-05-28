@@ -31,40 +31,26 @@ namespace ploomes_teste.negocio.Implementations
                 throw e;
             }
         }
-        public bool ValidateNotaAmbiente(double notaAmbiente)
+        public bool ValidateNota(double nota)
         {
-            return notaAmbiente >= 0.0 && notaAmbiente <= 5.0; 
+            return nota >= 0.0 && nota<= 5.0; 
         }
 
-        public bool ValidateNotaAtendimento(double notaAtendimento)
-        {
-            return notaAtendimento >= 0.0 && notaAtendimento <= 5.0; 
-        }
-
-        public bool ValidateNotaPreco(double notaPreco)
-        {
-            return notaPreco >= 0.0 && notaPreco <= 5.0; 
-        }
-
-        public bool ValidateNotaQualidade(double notaQualidade)
-        {
-            return notaQualidade >= 0.0 && notaQualidade <= 5.0; 
-        }
-
+      
         public async Task<List<string>> Validate(Avaliacao avaliacao,string idUsuarioLogado)
         {
             List<string> validationResult =new();
 
-            if (!ValidateNotaAmbiente(avaliacao.NotaAmbiente))
+            if (!ValidateNota(avaliacao.NotaAmbiente))
                 validationResult.Add("A nota do ambiente não está entre 0.0 e 5.0");
             
-            if (!ValidateNotaAmbiente(avaliacao.NotaAtendimento))
+            if (!ValidateNota(avaliacao.NotaAtendimento))
                 validationResult.Add("A nota do atendimento não está entre 0.0 e 5.0");
 
-            if (!ValidateNotaAmbiente(avaliacao.NotaPreco))
+            if (!ValidateNota(avaliacao.NotaPreco))
                 validationResult.Add("A nota do preço não está entre 0.0 e 5.0");
 
-            if (!ValidateNotaAmbiente(avaliacao.NotaQualidade))
+            if (!ValidateNota(avaliacao.NotaQualidade))
                 validationResult.Add("A nota da qualidade não está entre 0.0 e 5.0");
 
             if (! await ValidateAvaliacaoDuplicada(avaliacao.LugarId,idUsuarioLogado))
