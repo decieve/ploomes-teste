@@ -22,7 +22,7 @@ namespace ploomes_teste.api.Controllers
         }
 
         /// <summary>
-        /// Cria um Lugar.
+        /// Cria um Lugar.  (É necessário possuir um token para a autorização).
         /// </summary>
         /// <param name="criarLugarDTO">Os dados para criar um Lugar.</param>
         /// <returns>O Lugar recém-criado.</returns>
@@ -71,7 +71,7 @@ namespace ploomes_teste.api.Controllers
             }
         }
         /// <summary>
-        /// Atualiza um Lugar.
+        /// Atualiza um Lugar. (É necessário possuir um token para a autorização).
         /// </summary>
         /// <param name="atualizarLugarDTO">Os dados para atualizar um Lugar.</param>
         /// <param name="idLugar">O ID do Lugar a ser atualizado.</param>
@@ -129,7 +129,7 @@ namespace ploomes_teste.api.Controllers
             }
         }
         /// <summary>
-        /// Obtém uma página de Lugares.
+        /// Obtém uma página de Lugares. 
         /// </summary>
         /// <param name="pageNumber">O número da página a ser obtida.</param>
         /// <returns>Uma página de Lugares.</returns>
@@ -165,7 +165,7 @@ namespace ploomes_teste.api.Controllers
             }
         }
         /// <summary>
-        /// Obtém uma página de Lugares de um Proprietário.
+        /// Obtém uma página de Lugares do proprietário autenticado (É necessário possuir um token para a autorização).
         /// </summary>
         /// <param name="pageNumber">O número da página a ser obtida.</param>
         /// <returns>Uma página de Lugares pertencentes ao Proprietário autenticado.</returns>
@@ -206,7 +206,7 @@ namespace ploomes_teste.api.Controllers
             }
         }
         /// <summary>
-        /// Obtém uma página de Lugares com base na localização do Avaliador.
+        /// Obtém uma página de Lugares com base na localização do Avaliador (É necessário possuir um token para a autorização).
         /// </summary>
         /// <param name="pageNumber">O número da página a ser obtida.</param>
         /// <returns>Uma página de Lugares com base na localização do Avaliador autenticado.</returns>
@@ -247,7 +247,7 @@ namespace ploomes_teste.api.Controllers
             }
         }
         /// <summary>
-        /// Deleta um Lugar.
+        /// Deleta um Lugar (É necessário possuir um token para a autorização).
         /// </summary>
         /// <param name="idLugar">O ID do Lugar a ser deletado.</param>
         /// <returns>O Lugar que foi deletado.</returns>

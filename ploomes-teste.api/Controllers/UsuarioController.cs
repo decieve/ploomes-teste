@@ -20,7 +20,7 @@ public class UsuarioController : ControllerBase
     }
 
     /// <summary>
-    /// Obtém informações do usuário atualmente autenticado.
+    /// Obtém informações do usuário atualmente autenticado (É necessário possuir um token para a autorização).
     /// </summary>
     /// <returns>As informações do usuário autenticado.</returns>
     /// <remarks>
