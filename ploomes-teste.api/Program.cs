@@ -204,6 +204,7 @@ builder.Services.AddAuthentication(x =>
 var app = builder.Build();
 using var scope = app.Services.CreateScope();
 CreateRoles(scope.ServiceProvider).Wait();
+
 app.UseForwardedHeaders(new ForwardedHeadersOptions
 {
     ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto

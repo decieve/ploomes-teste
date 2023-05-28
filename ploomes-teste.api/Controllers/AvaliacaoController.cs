@@ -92,16 +92,17 @@ public class AvaliacaoController : ControllerBase
         ///
         /// </remarks>
         /// <response code="200">Retorna a Avaliação recém-criada.</response>
-        /// <response code="401">Se o usuário não estiver autenticado (ou não possuir um token no header).</response>
+        /// <response code="401">Se o usuário não estiver autenticado (ou não possuir um token válido no header).</response>
         /// <response code="403">Se o usuário for um proprietário, ou não for o usuário que realizou a avaliação.</response>
         /// <response code="400">Se houver um erro de validação.</response>
         /// <response code="500">Se ocorrer um erro inesperado.</response>
         [Authorize(Roles = "Avaliador")]
         [HttpPut]
         [Route("atualizar/{idAvaliacao}")]
-        [ProducesResponseType(typeof(AtualizarAvaliacaoDTO),StatusCodes.Status200OK )]
+        [ProducesResponseType(typeof(AvaliacaoUsuarioDTO),StatusCodes.Status200OK )]
         [ProducesResponseType(typeof(string), StatusCodes.Status401Unauthorized )]
         [ProducesResponseType(typeof(string), StatusCodes.Status403Forbidden )]
+        [ProducesResponseType(typeof(string), StatusCodes.Status404NotFound )]
         [ProducesResponseType(typeof(string[]), StatusCodes.Status400BadRequest )]
         [ProducesResponseType(typeof(string),StatusCodes.Status500InternalServerError )]
         public async Task<IActionResult> AtualizarAvaliacao(AtualizarAvaliacaoDTO atualizarAvaliacaoDTO,Guid idAvaliacao){
@@ -148,6 +149,11 @@ public class AvaliacaoController : ControllerBase
         [Authorize(Roles = "Avaliador")]
         [HttpGet]
         [Route("avaliador/page/{pageNumber}")]
+        [ProducesResponseType(typeof(AvaliacaoUsuarioPageDTO),StatusCodes.Status200OK )]
+        [ProducesResponseType(typeof(string), StatusCodes.Status401Unauthorized )]
+        [ProducesResponseType(typeof(string), StatusCodes.Status403Forbidden )]
+        [ProducesResponseType(typeof(string[]), StatusCodes.Status400BadRequest )]
+        [ProducesResponseType(typeof(string),StatusCodes.Status500InternalServerError )]
         public async Task<IActionResult> GetAvaliacoesPageByAvaliador(int pageNumber){
             try{
                 ClaimsPrincipal principal = HttpContext.User as ClaimsPrincipal;
@@ -168,24 +174,26 @@ public class AvaliacaoController : ControllerBase
             }
         }
         /// <summary>
-        ///     Obtém as avaliações de um usuário logado
+        ///     Obtém as avaliações de um lugar especificado
         /// </summary>
         /// <param name="pageNumber">O número da página</param>
-        /// <returns>Retorna a página de avaliações especificada do usuário logado.</returns>
+        /// <param name="idLugar">O id do lugar</param>
+        /// <returns>Retorna a página de avaliações de um lugar</returns>
         /// <remarks>
         /// Exemplo de requisição:
         ///
-        ///     GET /lugar//page/
+        ///     GET /avaliacao/lugar/7bf4e5c4-0595-4649-911d-08db5f0cbbd3/page/1
         ///
         /// </remarks>
         /// <response code="200">Retorna a página de avaliações .</response>
-        /// <response code="401">Se o usuário não estiver autenticado (ou não)possuir um token no header).</response>
-        /// <response code="403">Se o usuário for um proprietário</response>
         /// <response code="400">Se o número da página for menor que 1.</response>
         /// <response code="500">Se ocorrer um erro inesperado.</response>
         [AllowAnonymous]
         [HttpGet]
         [Route("lugar/{idLugar}/page/{pageNumber}")]
+        [ProducesResponseType(typeof(AvaliacaoLugarPageDTO),StatusCodes.Status200OK )]
+        [ProducesResponseType(typeof(string[]), StatusCodes.Status400BadRequest )]
+        [ProducesResponseType(typeof(string),StatusCodes.Status500InternalServerError )]
         public async Task<IActionResult> GetAvaliacoesPageByLugar(int pageNumber,Guid idLugar){
             try{
 
@@ -199,9 +207,31 @@ public class AvaliacaoController : ControllerBase
                 return Problem("Algo deu errado");
             }
         }
+        /// <summary>
+        ///     Deleta uma avaliação especifiada através do id
+        /// </summary>
+        /// <param name="idAvaliacao">O id da avaliação a ser deletada</param>
+        /// <returns>Retorna a avaliação deletada</returns>
+        /// <remarks>
+        /// Exemplo de requisição:
+        ///
+        ///     GET /avaliacao/deletar/7bf4e5c4-0595-4649-911d-08db5f0cbbd3/
+        ///
+        /// </remarks>
+        /// <response code="200">Retorna a página de avaliações .</response>
+        /// <response code="401">Se o usuário não estiver autenticado (ou não possuir um token válido no header).</response>
+        /// <response code="403">Se o usuário for um proprietário ou não for o usuário que criou a avaliação</response>
+        /// <response code="400">Se houver algum erro de validação.</response>
+        /// <response code="500">Se ocorrer um erro inesperado.</response>
         [Authorize(Roles = "Avaliador")]
         [HttpDelete]
         [Route("deletar/{idAvaliacao}")]
+        [ProducesResponseType(typeof(AvaliacaoUsuarioDTO),StatusCodes.Status200OK )]
+        [ProducesResponseType(typeof(string), StatusCodes.Status401Unauthorized )]
+        [ProducesResponseType(typeof(string), StatusCodes.Status403Forbidden )]
+        [ProducesResponseType(typeof(string), StatusCodes.Status404NotFound )]
+        [ProducesResponseType(typeof(string[]), StatusCodes.Status400BadRequest )]
+        [ProducesResponseType(typeof(string),StatusCodes.Status500InternalServerError )]
         public async Task<IActionResult> DeletarAvaliacao(Guid idAvaliacao){
             try{
                 ClaimsPrincipal principal = HttpContext.User as ClaimsPrincipal;
