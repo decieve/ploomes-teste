@@ -4,3 +4,7 @@ Também é possível cadastrar novos lugares através do CNPJ.
 
 Utiliza Entity Framework Core 6,AutoMapper e o Framework Identity Core para autenticar os usuários.
 
+### Arquitetura utilizada
+
+ ![](Resources/Arquitetura.png)
+
