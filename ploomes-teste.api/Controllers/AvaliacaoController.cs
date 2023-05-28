@@ -20,7 +20,7 @@ public class AvaliacaoController : ControllerBase
             _userManager =userManager;
         }
         /// <summary>
-        ///     Cria uma Avaliação.
+        ///     Cria uma Avaliação (É necessário possuir um token para a autorização).
         /// </summary>
         /// <param name="criarAvaliacaoDTO">Os dados para criar uma Avaliação.</param>
         /// <returns>A Avaliação recém-criada.</returns>
@@ -72,7 +72,7 @@ public class AvaliacaoController : ControllerBase
             }
         }
         /// <summary>
-        ///     Altera uma Avaliação.
+        ///     Altera uma Avaliação (É necessário possuir um token para a autorização).
         /// </summary>
         /// <param name="atualizarAvaliacaoDTO">Os dados para alterar uma Avaliação existente.</param>
         /// <param name="idAvaliacao">O id da avaliação a ser modificada</param>
@@ -131,7 +131,7 @@ public class AvaliacaoController : ControllerBase
             }
         }
         /// <summary>
-        ///     Obtém as avaliações de um usuário logado
+        ///     Obtém as avaliações de um usuário logado (É necessário possuir um token para a autorização)
         /// </summary>
         /// <param name="pageNumber">O número da página</param>
         /// <returns>Retorna a página de avaliações especificada do usuário logado.</returns>
@@ -174,7 +174,7 @@ public class AvaliacaoController : ControllerBase
             }
         }
         /// <summary>
-        ///     Obtém as avaliações de um lugar especificado
+        ///     Obtém as avaliações de um lugar especificado 
         /// </summary>
         /// <param name="pageNumber">O número da página</param>
         /// <param name="idLugar">O id do lugar</param>
@@ -208,7 +208,7 @@ public class AvaliacaoController : ControllerBase
             }
         }
         /// <summary>
-        ///     Deleta uma avaliação especifiada através do id
+        ///     Deleta uma avaliação especifiada através do id (É necessário possuir um token para a autorização)
         /// </summary>
         /// <param name="idAvaliacao">O id da avaliação a ser deletada</param>
         /// <returns>Retorna a avaliação deletada</returns>

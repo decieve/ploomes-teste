@@ -99,8 +99,8 @@ namespace ploomes_teste.negocio.Implementations
             if (!ValidateLatitude(lugar.Latitude))
                 validationResult.Add("A latitude não está entre 90 e -90 graus");
             
-            if (!ValidateLatitude(lugar.Longitude))
-               validationResult.Add("A longitude não está entre 0 e 180 graus");
+            if (!ValidateLongitude(lugar.Longitude))
+               validationResult.Add("A longitude não está entre -180 e 180 graus");
             
             if (! await ValidateCnpjDuplicado(lugar.Cnpj))
                 validationResult.Add("Já existe um lugar com o cnpj especificado");

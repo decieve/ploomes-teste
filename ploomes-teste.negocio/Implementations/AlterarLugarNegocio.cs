@@ -32,7 +32,7 @@ namespace ploomes_teste.negocio.Implementations
             if (!ValidateLatitude(lugar.Latitude))
                 validationResult.Add("A latitude não está entre 90 e -90 graus");
             
-            if (!ValidateLatitude(lugar.Longitude))
+            if (!ValidateLongitude(lugar.Longitude))
                validationResult.Add("A longitude não está entre -180 e 180 graus");
 
             return validationResult;

@@ -152,7 +152,7 @@ public class UsuarioController : ControllerBase
     ///
     ///     POST /login
     ///     {
-    ///        "email": "joao.silva@example.com",
+    ///        "userName": "joaozinho",
     ///        "senha": "SenhaSegura123"
     ///     }
     ///
