@@ -1,23 +1,21 @@
 # ploomes-teste
 
-Teste prático do projeto da ploomes, consiste em uma API RESTful cujo propósito é realizar avaliaçoes de lugares no mundo através da localização por longitude e latitude.
-Também é possível cadastrar novos lugares através do CNPJ.
+Teste prático do projeto da ploomes, consiste em uma API RESTful cujo objetivo dessa API é permitir a avaliação de lugares ao redor do mundo com base em sua localização através de coordenadas de longitude e latitude. Além disso, também é possível cadastrar novos lugares utilizando o CNPJ.
 
-É possivel se cadastrar como avaliadores ou proprietários, além disso é possível obter os lugares mais próximos pela localização de um avaliador.
+Os usuários têm a opção de se cadastrar como avaliadores ou proprietários, e os avaliadores podem encontrar os lugares mais próximos com base em sua própria localização. No entanto, para realizar avaliações, é necessário fazer login como avaliador.
 
-Para avaliar é necessário possuir um login de avaliador.
+Ao fazer uma avaliação, os usuários podem atribuir notas decimais de 0.0 a 5.0 para os seguintes aspectos:
 
-Ao avaliar é possível dar notas decimais de 0.0 a 5.0 para:
+- Ambiente do lugar
+- Preço do lugar
+- Qualidade do serviço ou produtos oferecidos
+- Atendimento do estabelecimento
 
-- O ambiente do lugar
-- O preço do lugar
-- A qualidade do serviço ou consumíveis
-- O atendimento do lugar
+Existe também a opção de realizar uma avaliação anônima, onde o nome do avaliador não será exibido.
 
-Também é possível realizar uma avaliação anônima (O nome da pessoa não aparecerá).
+A avaliação poderá ser atualizada, e guardará o histórico de notas e descrição.
 
-Um usuário não logado pode ver os lugares e avaliações de forma limitada.
-
+Os usuários não logados têm acesso limitado às informações dos lugares e avaliações disponíveis.
 
 
 Utiliza Entity Framework Core 6,AutoMapper e o Framework Identity Core para autenticar os usuários.
